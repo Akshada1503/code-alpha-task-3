@@ -1,0 +1,36 @@
+Installing Suricata on Kali Linux
+Update Kali Linux
+   Before installing Suricata, update your Kali Linux system to ensure all packages are up-to-date:
+sudo apt update
+sudo apt upgrade -y
+Install Suricata
+  sudo apt install suricata -y
+  Verify Installation:
+   After installation, verify Suricata is installed correctly by checking its version
+   suricata --version
+ Configure Suricata
+Configure Network Interface
+  Suricata needs to know which network interface to monitor
+    ip a
+Edit Suricata Configuration:Suricata’s configuration file is located at /etc/suricata/suricata.yaml. Open it for editing:
+sudo nano /etc/suricata/suricata.yaml
+ Set the correct interface by modifying the interface field under the af-packet section:
+    af-packet:
+  - interface: eth0:-Replace eth0 with the name of your network interface.
+The HOME_NET variable defines the range of IP addresses that Suricata is monitoring. Set HOME_NET to your local network or IP address (e.g., 192.168.0.0/24):
+ home-net:
+  - 192.168.0.0/24
+make sure it’s uncommented and configured
+- eve-log:
+      enabled: yes
+      filetype: regular
+      filename: /var/log/suricata/eve.json
+Set Up Suricata Rules
+Suricata comes with default rule sets, but you may want to update them to get the latest detection rules:
+   sudo suricata-update 
+After configuring Suricata, you can start it in IDS mode 
+   sudo suricata -c /etc/suricata/suricata.yaml -i eth0
+Replace eth0 with your network interface. Suricata will start monitoring traffic and generate alerts based on your rules.
+Suricata will log alerts to /var/log/suricata/eve.json
+    cat /var/log/suricata/eve.json
+    
